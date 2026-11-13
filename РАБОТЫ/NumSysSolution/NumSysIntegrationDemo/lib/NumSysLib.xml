@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NumSysLib</name>
+    </assembly>
+    <members>
+        <member name="T:NumSysLib.Adapter">
+            <summary>
+            Предоставляет единый доступ к переводу чисел между системами счисления.
+            </summary>
+        </member>
+        <member name="P:NumSysLib.Adapter.Value">
+            <summary>
+            Получает или задаёт число для перевода.
+            </summary>
+        </member>
+        <member name="P:NumSysLib.Adapter.FromBase">
+            <summary>
+            Получает или задаёт основание исходной системы счисления.
+            </summary>
+        </member>
+        <member name="P:NumSysLib.Adapter.ToBase">
+            <summary>
+            Получает или задаёт основание системы счисления результата.
+            </summary>
+        </member>
+        <member name="M:NumSysLib.Adapter.Convert(System.String,System.Int32,System.Int32)">
+            <summary>
+            Переводит число между системами счисления 2, 8, 10 и 16.
+            </summary>
+            <param name="value">Число для перевода.</param>
+            <param name="fromBase">Основание исходной системы.</param>
+            <param name="toBase">Основание системы результата.</param>
+            <returns>Строковое представление результата.</returns>
+        </member>
+        <member name="T:NumSysLib.Binary">
+            <summary>
+            Выполняет операции с двоичной системой счисления.
+            </summary>
+        </member>
+        <member name="T:NumSysLib.ConverterBase">
+            <summary>
+            Содержит общий алгоритм чтения и записи числа в заданной системе счисления.
+            </summary>
+        </member>
+        <member name="T:NumSysLib.DecimalNumber">
+            <summary>
+            Выполняет операции с десятичной системой счисления.
+            </summary>
+        </member>
+        <member name="T:NumSysLib.Hex">
+            <summary>
+            Выполняет операции с шестнадцатеричной системой счисления.
+            </summary>
+        </member>
+        <member name="T:NumSysLib.Oct">
+            <summary>
+            Выполняет операции с восьмеричной системой счисления.
+            </summary>
+        </member>
+    </members>
+</doc>
