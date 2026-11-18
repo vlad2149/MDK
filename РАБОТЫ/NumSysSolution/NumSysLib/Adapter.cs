@@ -1,116 +1,75 @@
-using System;
+namespace NumSysLib;
 
-namespace NumSysLib
+public class Adapter
 {
-    /// <summary>
-    /// Предоставляет единый доступ к переводу чисел между системами счисления.
-    /// </summary>
-    public class Adapter
+    public string Convert(string value, int fromBase, int toBase)
     {
-        private string numberValue = "0";
-        private int fromBase = 10;
-        private int toBase = 2;
+        ValidateBase(fromBase);
+        ValidateBase(toBase);
 
-        /// <summary>
-        /// Получает или задаёт число для перевода.
-        /// </summary>
-        public string Value
+        if (string.IsNullOrWhiteSpace(value))
         {
-            get
-            {
-                return numberValue;
-            }
-            set
-            {
-                string newValue = value?.Trim().ToUpperInvariant() ?? "";
-                ConverterBase converter = CreateConverter(FromBase);
-
-                if (!converter.IsValid(newValue))
-                {
-                    throw new ArgumentException($"Число не соответствует системе счисления с основанием {FromBase}.");
-                }
-
-                numberValue = newValue;
-            }
+            throw new ArgumentException("Ошибка ввода данных, проверьте вводимые данные.");
         }
 
-        /// <summary>
-        /// Получает или задаёт основание исходной системы счисления.
-        /// </summary>
-        public int FromBase
+        string preparedValue = value.Trim().ToUpper();
+
+        if (fromBase == 10 && toBase == 10)
         {
-            get
-            {
-                return fromBase;
-            }
-            set
-            {
-                ConverterBase converter = CreateConverter(value);
-
-                if (!converter.IsValid(Value))
-                {
-                    throw new ArgumentException($"Число не соответствует системе счисления с основанием {value}.");
-                }
-
-                fromBase = value;
-            }
+            return ReadDecimal(preparedValue).ToString();
+        }
+        if (fromBase == 10)
+        {
+            ConverterBase target = CreateConverter(toBase);
+            return target.ConvertFrom10(preparedValue);
+        }
+        if (toBase == 10)
+        {
+            ConverterBase source = CreateConverter(fromBase);
+            return source.ConvertTo10(preparedValue);
         }
 
-        /// <summary>
-        /// Получает или задаёт основание системы счисления результата.
-        /// </summary>
-        public int ToBase
+        ConverterBase fromConverter = CreateConverter(fromBase);
+        ConverterBase toConverter = CreateConverter(toBase);
+        string decimalValue = fromConverter.ConvertTo10(preparedValue);
+        return toConverter.ConvertFrom10(decimalValue);
+    }
+
+    private ConverterBase CreateConverter(int numberBase)
+    {
+        if (numberBase == 2)
         {
-            get
-            {
-                return toBase;
-            }
-            set
-            {
-                CreateConverter(value);
-                toBase = value;
-            }
+            return new Binary();
+        }
+        if (numberBase == 8)
+        {
+            return new Oct();
+        }
+        if (numberBase == 16)
+        {
+            return new Hex();
         }
 
-        /// <summary>
-        /// Переводит число между системами счисления 2, 8, 10 и 16.
-        /// </summary>
-        /// <param name="value">Число для перевода.</param>
-        /// <param name="fromBase">Основание исходной системы.</param>
-        /// <param name="toBase">Основание системы результата.</param>
-        /// <returns>Строковое представление результата.</returns>
-        public string Convert(string value, int fromBase, int toBase)
-        {
-            Value = "0";
-            FromBase = fromBase;
-            ToBase = toBase;
-            Value = value;
+        throw new ArgumentException("Ошибка ввода данных, проверьте вводимые данные.");
+    }
 
-            ConverterBase source = CreateConverter(FromBase);
-            ConverterBase target = CreateConverter(ToBase);
-            return source.ConvertTo(Value, target);
+    private void ValidateBase(int numberBase)
+    {
+        if (numberBase != 2 && numberBase != 8 && numberBase != 10 && numberBase != 16)
+        {
+            throw new ArgumentException("Ошибка ввода данных, проверьте вводимые данные.");
+        }
+    }
+
+    private long ReadDecimal(string value)
+    {
+        long number = long.Parse(value);
+
+        if (number < 0)
+        {
+            throw new ArgumentException("Ошибка ввода данных, проверьте вводимые данные.");
         }
 
-        private ConverterBase CreateConverter(int numberBase)
-        {
-            if (numberBase == 2)
-            {
-                return new Binary();
-            }
-            if (numberBase == 8)
-            {
-                return new Oct();
-            }
-            if (numberBase == 10)
-            {
-                return new DecimalNumber();
-            }
-            if (numberBase == 16)
-            {
-                return new Hex();
-            }
-
-            throw new ArgumentException("Поддерживаются только системы счисления 2, 8, 10 и 16.");
-        }
+        return number;
     }
 }

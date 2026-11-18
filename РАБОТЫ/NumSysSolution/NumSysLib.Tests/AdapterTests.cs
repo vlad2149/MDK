@@ -1,79 +1,117 @@
-using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NumSysLib;
 
-namespace NumSysLib.Tests
+namespace NumSysLib.Tests;
+
+public class AdapterTests
 {
-    [TestClass]
-    public class AdapterTests
+    [Fact]
+    public void BinaryToDecimalReturns13()
     {
-        private Adapter adapter = null!;
+        Adapter adapter = new Adapter();
+        string value = "1101";
+        string expected = "13";
 
-        [TestInitialize]
-        public void CreateAdapter()
-        {
-            adapter = new Adapter();
-        }
+        string actual = adapter.Convert(value, 2, 10);
 
-        [TestMethod]
-        public void BinaryToDecimal()
-        {
-            Assert.AreEqual("42", adapter.Convert("101010", 2, 10));
-        }
+        Assert.Equal(expected, actual);
+    }
 
-        [TestMethod]
-        public void DecimalToBinary()
-        {
-            Assert.AreEqual("101010", adapter.Convert("42", 10, 2));
-        }
+    [Fact]
+    public void OctToDecimalReturns63()
+    {
+        Adapter adapter = new Adapter();
+        string value = "77";
+        string expected = "63";
 
-        [TestMethod]
-        public void OctToDecimal()
-        {
-            Assert.AreEqual("63", adapter.Convert("77", 8, 10));
-        }
+        string actual = adapter.Convert(value, 8, 10);
 
-        [TestMethod]
-        public void DecimalToOct()
-        {
-            Assert.AreEqual("77", adapter.Convert("63", 10, 8));
-        }
+        Assert.Equal(expected, actual);
+    }
 
-        [TestMethod]
-        public void HexToDecimal()
-        {
-            Assert.AreEqual("255", adapter.Convert("FF", 16, 10));
-        }
+    [Fact]
+    public void InvalidSymbolThrowsException()
+    {
+        Adapter adapter = new Adapter();
 
-        [TestMethod]
-        public void DecimalToHex()
-        {
-            Assert.AreEqual("FF", adapter.Convert("255", 10, 16));
-        }
+        Action action = () => adapter.Convert("102", 2, 10);
 
-        [TestMethod]
-        public void BinaryToHexDirectly()
-        {
-            Assert.AreEqual("FF", adapter.Convert("11111111", 2, 16));
-        }
+        Assert.Throws<ArgumentException>(action);
+    }
 
-        [TestMethod]
-        public void AdapterCanConvertSeveralValues()
-        {
-            Assert.AreEqual("255", adapter.Convert("FF", 16, 10));
-            Assert.AreEqual("10", adapter.Convert("1010", 2, 10));
-        }
+    [Fact]
+    public void EmptyValueThrowsException()
+    {
+        Adapter adapter = new Adapter();
 
-        [TestMethod]
-        public void InvalidDigitThrowsException()
-        {
-            Assert.Throws<ArgumentException>(() => adapter.Convert("102", 2, 10));
-        }
+        Action action = () => adapter.Convert("", 2, 10);
 
-        [TestMethod]
-        public void InvalidBaseThrowsException()
-        {
-            Assert.Throws<ArgumentException>(() => adapter.Convert("10", 3, 2));
-        }
+        Assert.Throws<ArgumentException>(action);
+    }
+
+    [Fact]
+    public void InvalidBaseThrowsException()
+    {
+        Adapter adapter = new Adapter();
+
+        Action action = () => adapter.Convert("10", 3, 10);
+
+        Assert.Throws<ArgumentException>(action);
+    }
+
+    [Fact]
+    public void MaximumDecimalValueConvertsToHex()
+    {
+        Adapter adapter = new Adapter();
+        string value = long.MaxValue.ToString();
+        string expected = "7FFFFFFFFFFFFFFF";
+
+        string actual = adapter.Convert(value, 10, 16);
+
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void BinaryValueWith63BitsConvertsToDecimal()
+    {
+        Adapter adapter = new Adapter();
+        string value = new string('1', 63);
+        string expected = long.MaxValue.ToString();
+
+        string actual = adapter.Convert(value, 2, 10);
+
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void BinaryValueWith64BitsThrowsOverflowException()
+    {
+        Adapter adapter = new Adapter();
+        string value = new string('1', 64);
+
+        Action action = () => adapter.Convert(value, 2, 10);
+
+        Assert.Throws<OverflowException>(action);
+    }
+
+    [Fact]
+    public void BinaryValueWith70BitsThrowsOverflowException()
+    {
+        Adapter adapter = new Adapter();
+        string value = new string('1', 70);
+
+        Action action = () => adapter.Convert(value, 2, 10);
+
+        Assert.Throws<OverflowException>(action);
+    }
+
+    [Fact]
+    public void DecimalValueLargerThanLongThrowsOverflowException()
+    {
+        Adapter adapter = new Adapter();
+        string value = "9223372036854775808";
+
+        Action action = () => adapter.Convert(value, 10, 2);
+
+        Assert.Throws<OverflowException>(action);
     }
 }

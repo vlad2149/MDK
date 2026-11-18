@@ -5,7 +5,4 @@ obj/
 !*.cs
 !*.csproj
 !*.sln
-!*.md
-!РАБОТЫ/NumSysSolution/NumSysIntegrationDemo/lib/NumSysLib.dll
-!РАБОТЫ/NumSysSolution/NumSysIntegrationDemo/lib/NumSysLib.xml
 !.gitignore

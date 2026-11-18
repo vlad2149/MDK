@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumSysDemo", "NumSysDemo\Nu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumSysLib.Tests", "NumSysLib.Tests\NumSysLib.Tests.csproj", "{CCA87A0B-A362-4F3E-A87A-031A02C8F0E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumSysIntegrationDemo", "NumSysIntegrationDemo\NumSysIntegrationDemo.csproj", "{AF313F6D-514B-4133-9A00-3C0EFB857080}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,18 +55,6 @@ Global
 		{CCA87A0B-A362-4F3E-A87A-031A02C8F0E1}.Release|x64.Build.0 = Release|Any CPU
 		{CCA87A0B-A362-4F3E-A87A-031A02C8F0E1}.Release|x86.ActiveCfg = Release|Any CPU
 		{CCA87A0B-A362-4F3E-A87A-031A02C8F0E1}.Release|x86.Build.0 = Release|Any CPU
-		{AF313F6D-514B-4133-9A00-3C0EFB857080}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AF313F6D-514B-4133-9A00-3C0EFB857080}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AF313F6D-514B-4133-9A00-3C0EFB857080}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{AF313F6D-514B-4133-9A00-3C0EFB857080}.Debug|x64.Build.0 = Debug|Any CPU
-		{AF313F6D-514B-4133-9A00-3C0EFB857080}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{AF313F6D-514B-4133-9A00-3C0EFB857080}.Debug|x86.Build.0 = Debug|Any CPU
-		{AF313F6D-514B-4133-9A00-3C0EFB857080}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AF313F6D-514B-4133-9A00-3C0EFB857080}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AF313F6D-514B-4133-9A00-3C0EFB857080}.Release|x64.ActiveCfg = Release|Any CPU
-		{AF313F6D-514B-4133-9A00-3C0EFB857080}.Release|x64.Build.0 = Release|Any CPU
-		{AF313F6D-514B-4133-9A00-3C0EFB857080}.Release|x86.ActiveCfg = Release|Any CPU
-		{AF313F6D-514B-4133-9A00-3C0EFB857080}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

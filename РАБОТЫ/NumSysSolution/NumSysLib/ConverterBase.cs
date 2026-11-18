@@ -1,100 +1,51 @@
-using System.Text;
+namespace NumSysLib;
 
-namespace NumSysLib
+internal abstract class ConverterBase
 {
-    /// <summary>
-    /// Содержит общий алгоритм чтения и записи числа в заданной системе счисления.
-    /// </summary>
-    internal abstract class ConverterBase
+    internal abstract string ConvertTo10(string value);
+    internal abstract string ConvertFrom10(string value);
+
+    protected string ToBase10(string digitTo, int fromBase)
     {
-        protected int NumberBase { get; }
+        const string hexChars = "0123456789ABCDEF";
+        long decimalValue = 0;
 
-        protected ConverterBase(int numberBase)
+        checked
         {
-            NumberBase = numberBase;
+            foreach (char symbol in digitTo)
+            {
+                int digit = hexChars.IndexOf(char.ToUpper(symbol));
+                decimalValue = decimalValue * fromBase + digit;
+            }
         }
 
-        internal bool IsValid(string value)
+        return decimalValue.ToString();
+    }
+
+    protected string FromBase10(string digitFrom, int toBase)
+    {
+        long currentDigit = long.Parse(digitFrom);
+
+        if (currentDigit < 0)
         {
-            if (string.IsNullOrWhiteSpace(value))
-            {
-                return false;
-            }
-
-            foreach (char symbol in value)
-            {
-                int digit = DigitToNumber(symbol);
-                if (digit < 0 || digit >= NumberBase)
-                {
-                    return false;
-                }
-            }
-
-            return true;
+            throw new ArgumentException("Ошибка ввода данных, проверьте вводимые данные.");
+        }
+        if (currentDigit == 0)
+        {
+            return "0";
         }
 
-        internal string ConvertTo(string value, ConverterBase target)
+        const string hexChars = "0123456789ABCDEF";
+        List<char> digits = new List<char>();
+
+        while (currentDigit > 0)
         {
-            long number = ReadNumber(value);
-            return target.WriteNumber(number);
+            int digit = (int)(currentDigit % toBase);
+            digits.Add(hexChars[digit]);
+            currentDigit /= toBase;
         }
 
-        private long ReadNumber(string value)
-        {
-            long result = 0;
-
-            checked
-            {
-                foreach (char symbol in value)
-                {
-                    int digit = DigitToNumber(symbol);
-                    result = result * NumberBase + digit;
-                }
-            }
-
-            return result;
-        }
-
-        private string WriteNumber(long number)
-        {
-            if (number == 0)
-            {
-                return "0";
-            }
-
-            StringBuilder result = new StringBuilder();
-            while (number > 0)
-            {
-                int digit = (int)(number % NumberBase);
-                result.Insert(0, NumberToDigit(digit));
-                number /= NumberBase;
-            }
-
-            return result.ToString();
-        }
-
-        private int DigitToNumber(char symbol)
-        {
-            if (symbol >= '0' && symbol <= '9')
-            {
-                return symbol - '0';
-            }
-            if (symbol >= 'A' && symbol <= 'F')
-            {
-                return symbol - 'A' + 10;
-            }
-
-            return -1;
-        }
-
-        private char NumberToDigit(int number)
-        {
-            if (number < 10)
-            {
-                return (char)('0' + number);
-            }
-
-            return (char)('A' + number - 10);
-        }
+        digits.Reverse();
+        return new string(digits.ToArray());
     }
 }
