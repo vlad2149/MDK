@@ -1,0 +1,11 @@
+*
+!*/
+bin/
+obj/
+.vs/
+!*.cs
+!*.csproj
+!*.sln
+!*.txt
+!*.zip
+!.gitignore
